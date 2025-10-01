@@ -1,0 +1,90 @@
+-- local M = {
+--   _current_width = 0
+-- }
+--
+-- function M:width()
+--   return self._current_width
+-- end
+--
+-- function M:init(opts)
+--   if opts == nil or type(opts.size) ~= 'number' then
+--     opts = {
+--       size = 0.3
+--     }
+--   end
+--
+--   local curr_win = vim.api.nvim_get_current_win()
+--   local w = vim.api.nvim_win_get_width(curr_win)
+--
+--   local function create_win(dir)
+--     local companion = nil
+--     local buf = vim.api.nvim_create_buf(false, true)
+--
+--     local win = vim.api.nvim_open_win(buf, false, {
+--       focusable = false,
+--       fixed = true,
+--       hide = true,
+--
+--       split = dir,
+--       width = math.floor(w * opts.size)
+--     })
+--
+--     vim.api.nvim_set_option_value('number', false, { win = win })
+--     vim.api.nvim_set_option_value('signcolumn', 'no', { win = win })
+--     vim.api.nvim_set_option_value('cursorline', false, { win = win })
+--     vim.api.nvim_set_option_value('modifiable', false, { buf = buf })
+--     vim.api.nvim_set_option_value('readonly', true, { buf = buf })
+--
+--     local group = vim.api.nvim_create_augroup('win' .. win, {
+--       clear = true
+--     })
+--
+--     self._current_width = vim.api.nvim_win_get_width(win)
+--
+--     vim.api.nvim_create_autocmd('WinResized', {
+--       group = group,
+--       buffer = buf,
+--
+--       callback = function()
+--         local width = vim.api.nvim_win_get_width(win)
+--
+--         if companion ~= nil then
+--           vim.api.nvim_win_set_width(companion, width)
+--         end
+--
+--         self._current_width = width
+--       end
+--     })
+--
+--     vim.api.nvim_create_autocmd('CursorMoved', {
+--       group = group,
+--       buffer = buf,
+--
+--       callback = function()
+--         if not vim.api.nvim_win_is_valid(curr_win) then
+--           vim.api.nvim_win_close(win, true)
+--           vim.cmd [[ quit! ]]
+--
+--           return
+--         end
+--
+--         vim.api.nvim_set_current_win(curr_win)
+--       end
+--     })
+--
+--     return {
+--       window = win,
+--       assign_companion = function(_companion)
+--         companion = _companion
+--       end
+--     }
+--   end
+--
+--   local left = create_win('left')
+--   local right = create_win('right')
+--
+--   left.assign_companion(right.window)
+--   right.assign_companion(left.window)
+-- end
+--
+-- return M
