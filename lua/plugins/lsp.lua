@@ -1,79 +1,68 @@
 local function config()
-  local lspconfig = require 'lspconfig'
   local blink = require 'blink.cmp'
 
-  require 'flutter-tools'.setup {}
-
+  ---@type table
   local capabilities = blink.get_lsp_capabilities()
-
-  lspconfig.mesonlsp.setup {
-    capabilities = capabilities
-  }
-
-  lspconfig.gopls.setup {
-    capabilities = capabilities
-  }
-
-  lspconfig.ts_ls.setup {
-    capabilities = capabilities
-  }
-
-  lspconfig.svelte.setup {
-    capabilities = capabilities
-  }
-
-  lspconfig.pyright.setup {
-    capabilities = capabilities
-  }
-
-  -- lspconfig.clangd.setup {
-  --   capabilities = capabilities
-  -- }
-
-  lspconfig.sourcekit.setup {
-    capabilities = {
-      workspace = {
-        didChangeWatchedFiles = {
-          dynamicRegistration = true,
-        },
-      },
-    }
-  }
-
-  lspconfig.neocmake.setup {}
-
-  lspconfig.lua_ls.setup {
-    capabilites = capabilities,
-
-    settings = {
-      Lua = {
-        runtime = {
-          version = 'LuaJIT'
-        },
-
+  local servers = { 'sourcekit', 'lua_ls' }
+  local overrides = {
+    sourcekit = {
+      capabilities = {
         workspace = {
-          checkThirdParty = false,
-
-          library = {
-            vim.env.VIMRUNTIME
+          didChangeWatchedFiles = {
+            dynamicRegistration = true,
           },
         },
+      }
+    },
 
-        diagnostics = {
-          globals = {
+    lua_ls = {
+      settings = {
+        Lua = {
+          runtime = {
+            version = 'LuaJIT'
+          },
+
+          workspace = {
+            checkThirdParty = false,
+
+            library = {
+              vim.env.VIMRUNTIME
+            },
+          },
+
+          diagnostics = {
+            globals = {
+            }
           }
         }
       }
     }
   }
 
-  lspconfig.tailwindcss.setup {
-    capabilities = capabilities
-  }
+  local function overrides_for(server)
+    local opts = {
+      capabilities = capabilities
+    }
 
-  lspconfig.rust_analyzer.setup {
-    capabilities = capabilities
-  }
+    local tbl = overrides[server]
+
+    if type(tbl) ~= 'table' then
+      return opts
+    end
+
+    if type(tbl.capabilities) == 'table' then
+      opts.capabilities = vim.tbl_deep_extend('keep', opts.capabilities, tbl.capabilities)
+    end
+
+    return vim.tbl_deep_extend('keep', opts, tbl)
+  end
+
+  for _, server in ipairs(servers) do
+    local opts = overrides_for(server)
+
+    vim.lsp.enable(server)
+    vim.lsp.config[server] = opts
+  end
 
   blink.setup {
     appearance = {
@@ -187,6 +176,7 @@ local function config()
 
       local cid = ev.data.client_id
       local lsc = vim.lsp.get_client_by_id(cid)
+      local bufnr = ev.buf
 
       assert(lsc)
 
@@ -226,11 +216,11 @@ local function config()
       nmap('<leader>lf', vim.lsp.buf.format)
 
       nmap('d]', function()
-        vim.diagnostic.goto_next()
+        vim.diagnostic.jump({ diagnostic = vim.diagnostic.get_next() })
       end)
 
       nmap('d[', function()
-        vim.diagnostic.goto_prev()
+        vim.diagnostic.jump({ diagnostic = vim.diagnostic.get_prev() })
       end)
 
       if vim.bo.filetype == 'c' then
