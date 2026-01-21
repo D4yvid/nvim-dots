@@ -18,5 +18,6 @@ end
 return {
   'nvim-treesitter/nvim-treesitter',
 
+  branch = 'master',
   config = config
 }

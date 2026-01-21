@@ -1,7 +1,7 @@
 local function bootstrap_pckr()
   local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
 
----@diagnostic disable-next-line: undefined-field
+  ---@diagnostic disable-next-line: undefined-field
   if not vim.uv.fs_stat(pckr_path) then
     vim.fn.system {
       'git',
@@ -24,6 +24,14 @@ if vim.g.neovide then
   require 'neovide'
 end
 
--- require 'centered':init {
---   size = 0.16
--- }
+vim.cmd.colorscheme 'retrobox'
+
+vim.opt.termguicolors = true
+vim.opt.background = 'dark'
+
+vim.cmd [[
+  hi clear  CursorLineNr
+  hi clear  CursorLine
+  hi link		CursorLineNr   CursorLine
+  hi link		CursorLineSign CursorLine
+]]
