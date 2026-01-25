@@ -1,7 +1,8 @@
 local pckr = require 'pckr'
 
+require 'plugins.colorscheme'
+
 pckr.add {
-  require 'plugins.colorscheme',
   require 'plugins.treesitter',
   require 'plugins.fileexplorer',
   require 'plugins.telescope',

@@ -3,7 +3,7 @@ local function config()
 
   ---@type table
   local capabilities = blink.get_lsp_capabilities()
-  local servers = { 'sourcekit', 'lua_ls' }
+  local servers = { 'sourcekit', 'lua_ls', 'gopls' }
   local overrides = {
     sourcekit = {
       capabilities = {
