@@ -52,6 +52,10 @@ local function config()
       col = 1
     },
   }
+
+  vim.keymap.set('n', '<leader>gg', function ()
+    vim.cmd.Neogit()
+  end, { silent = true, noremap = true })
 end
 
 return {

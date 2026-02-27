@@ -1,3 +1,3 @@
 return {
-  scale_factor = 0.8
+  scale_factor = 1
 }

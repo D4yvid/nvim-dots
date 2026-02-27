@@ -24,11 +24,6 @@ if vim.g.neovide then
   require 'neovide'
 end
 
-vim.cmd.colorscheme 'retrobox'
-
-vim.opt.termguicolors = true
-vim.opt.background = 'dark'
-
 vim.cmd [[
   hi clear  CursorLineNr
   hi clear  CursorLine

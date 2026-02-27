@@ -1,12 +1,12 @@
 local function config()
-  local autopairs = require 'ultimate-autopair'
+    local autopairs = require 'ultimate-autopair'
 
-  autopairs.setup {
-  }
+    autopairs.setup {
+    }
 end
 
 return {
-  'altermo/ultimate-autopair.nvim',
+    'altermo/ultimate-autopair.nvim',
 
-  config = config
+    config = config
 }

@@ -3,8 +3,37 @@ local function config()
 
   ---@type table
   local capabilities = blink.get_lsp_capabilities()
-  local servers = { 'sourcekit', 'lua_ls', 'gopls' }
+  local servers = { 'clangd', 'lua_ls', 'gopls', 'ts_ls', 'qmlls', 'jsonls', 'mesonlsp' }
+
+  local function get_lua_libraries()
+    local libraries = {
+      vim.env.VIMRUNTIME,
+    }
+
+    local path = vim.fn.stdpath('data') .. '/site/pack'
+
+    for _, value in pairs(vim.opt.runtimepath:get()) do
+      if value:sub(1, #path) == path then
+        table.insert(libraries, value)
+      end
+    end
+
+    return libraries
+  end
+
   local overrides = {
+    jsonls = {
+      capabilities = {
+        textDocument = {
+          completion = {
+            completionItem = {
+              snippetSupport = true
+            }
+          }
+        }
+      }
+    },
+
     sourcekit = {
       capabilities = {
         workspace = {
@@ -25,9 +54,7 @@ local function config()
           workspace = {
             checkThirdParty = false,
 
-            library = {
-              vim.env.VIMRUNTIME
-            },
+            library = get_lua_libraries(),
           },
 
           diagnostics = {
@@ -70,6 +97,7 @@ local function config()
     },
 
     sources = {
+      default = { 'lsp', 'path', 'snippets', 'buffer', 'avante' },
       providers = {
         lsp = {
           name = 'LSP',
@@ -78,6 +106,13 @@ local function config()
           async = true,
           timeout_ms = 100,
           max_items = 100
+        },
+        avante = {
+          module = 'blink-cmp-avante',
+          name = 'Avante',
+          opts = {
+            -- options for blink-cmp-avante
+          }
         }
       }
     },
@@ -93,7 +128,7 @@ local function config()
       },
 
       ghost_text = {
-        enabled = true
+        enabled = false -- Disabled in favor of cursor-tab AI completions
       },
 
       documentation = {
@@ -224,7 +259,7 @@ local function config()
       end)
 
       if vim.bo.filetype == 'c' then
-        nmap('<leader>s', function() vim.cmd.ClangdSwitchSourceHeader() end)
+        nmap('<leader>s', function() vim.cmd.LspClangdSwitchSourceHeader() end)
       end
 
       vim.api.nvim_create_augroup('AutoFormatting', {})
@@ -249,6 +284,7 @@ return {
 
       tag = 'v1.*'
     },
+    'Kaiser-Yang/blink-cmp-avante',
     'rafamadriz/friendly-snippets',
     'nvim-flutter/flutter-tools.nvim'
   },

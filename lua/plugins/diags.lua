@@ -1,29 +1,29 @@
 local function config()
-  local trouble = require 'trouble'
-  local wsdiags = require 'workspace-diagnostics'
+    local trouble = require 'trouble'
+    local wsdiags = require 'workspace-diagnostics'
 
-  trouble.setup()
+    trouble.setup()
 
-  vim.api.nvim_create_autocmd('LspAttach', {
-    callback = function(ev)
-      local client = vim.lsp.get_client_by_id(ev.data.client_id)
-      local buf = ev.buf
+    vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(ev)
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+            local buf = ev.buf
 
-      wsdiags.populate_workspace_diagnostics(client, buf)
-    end
-  })
+            wsdiags.populate_workspace_diagnostics(client, buf)
+        end
+    })
 
-  vim.keymap.set('n', '<leader>dd', function()
-    vim.cmd.Telescope('diagnostics')
-  end, { silent = true, noremap = true })
+    vim.keymap.set('n', '<leader>dd', function()
+        vim.cmd.Telescope('diagnostics')
+    end, { silent = true, noremap = true })
 end
 
 return {
-  'folke/trouble.nvim',
+    'folke/trouble.nvim',
 
-  requires = {
-    'artemave/workspace-diagnostics.nvim'
-  },
+    requires = {
+        'artemave/workspace-diagnostics.nvim'
+    },
 
-  config = config
+    config = config
 }

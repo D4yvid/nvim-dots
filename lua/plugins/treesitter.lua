@@ -1,24 +1,24 @@
 local function config()
-  local ts = require 'nvim-treesitter.configs'
+    local ts = require 'nvim-treesitter.configs'
 
-  ts.setup {
-    ensure_installed = { 'c', 'lua', 'javascript', 'typescript', 'markdown', 'markdown_inline', 'vim', 'vimdoc' },
+    ts.setup {
+        ensure_installed = { 'c', 'lua', 'javascript', 'typescript', 'markdown', 'markdown_inline', 'vim', 'vimdoc' },
 
-    highlight = {
-      enable = true,
-      disable = { "swift" }
-    },
+        highlight = {
+            enable = true,
+            disable = { "swift" }
+        },
 
-    indent = {
-      enable = true
+        indent = {
+            enable = true
+        }
     }
-  }
 end
 
 return {
-  'nvim-treesitter/nvim-treesitter',
-  branch = 'master',
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'master',
 
-  branch = 'master',
-  config = config
+    branch = 'master',
+    config = config
 }
