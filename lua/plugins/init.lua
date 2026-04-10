@@ -13,6 +13,5 @@ pckr.add {
     require 'plugins.kiwi',
     require 'plugins.git',
     require 'plugins.markview',
-    require 'plugins.session',
-    require 'plugins.autotab'
+    require 'plugins.session'
 }
